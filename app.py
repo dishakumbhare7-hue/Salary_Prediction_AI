@@ -65,8 +65,7 @@ div[data-testid="stMetric"] {
 # Load Model & Dataset
 # ----------------------------------
 model = joblib.load("salary_model.pkl")
-data = pd.read_csv("dataset/salary_data.csv")
-
+data = pd.read_csv("salary_data.csv")
 # Accuracy Calculation
 X = data[["Experience","Skills"]]
 y = data["Salary"]
@@ -208,97 +207,93 @@ text-align:center;">
     c1.metric("Experience", f"{experience} Years")
     c2.metric("Skill Score", f"{skills}")
     c3.metric("Predicted Salary", f"₹ {prediction:,.0f}")
-# ----------------------------------
-# Dataset Section
-# ----------------------------------
-
 st.divider()
 
 st.subheader("📄 Dataset Section")
 
-show_dataset = st.checkbox("Show Dataset", key="dataset_new")
+st.dataframe(data, use_container_width=True)
 
-if show_dataset:
+st.subheader("📊 Salary Statistics")
 
-    st.dataframe(data, use_container_width=True)
+c1,c2,c3 = st.columns(3)
 
-    st.write("Dataset Loaded Successfully")
+c1.metric(
+    "Average Salary",
+    f"₹ {int(data['Salary'].mean()):,}"
+)
 
-    st.subheader("📊 Salary Statistics")
+c2.metric(
+    "Highest Salary",
+    f"₹ {int(data['Salary'].max()):,}"
+)
 
-    avg = data["Salary"].mean()
-    high = data["Salary"].max()
-    low = data["Salary"].min()
-
-    st.write("Average:", avg)
-    st.write("Highest:", high)
-    st.write("Lowest:", low)
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.metric(
-            label="Average Salary",
-            value=f"₹ {int(avg):,}"
-        )
-
-    with col2:
-        st.metric(
-            label="Highest Salary",
-            value=f"₹ {int(high):,}"
-        )
-
-    with col3:
-        st.metric(
-            label="Lowest Salary",
-            value=f"₹ {int(low):,}"
-        )
+c3.metric(
+    "Lowest Salary",
+    f"₹ {int(data['Salary'].min()):,}"
+)
 
 
-    st.subheader("📈 Experience vs Salary")
+st.subheader("📈 Experience vs Salary")
 
-    fig, ax = plt.subplots(figsize=(8,4))
-    ax.plot(
-        data["Experience"],
-        data["Salary"],
-        marker="o",
-        linewidth=2,
-        color="green"
-    )
+fig, ax = plt.subplots(figsize=(8,4))
 
-    ax.set_xlabel("Experience")
-    ax.set_ylabel("Salary")
-    ax.set_title("Experience vs Salary")
+ax.plot(
+    data["Experience"],
+    data["Salary"],
+    marker="o",
+    linewidth=2,
+    color="green"
+)
 
-    st.pyplot(fig)
+ax.set_xlabel("Experience")
+ax.set_ylabel("Salary")
+ax.set_title("Experience vs Salary")
 
-
-    st.subheader("📊 Salary Comparison")
-
-    fig2, ax2 = plt.subplots(figsize=(8,4))
-
-    ax2.bar(
-        data["Experience"],
-        data["Salary"],
-        color="orange"
-    )
-
-    ax2.set_xlabel("Experience")
-    ax2.set_ylabel("Salary")
-    ax2.set_title("Salary Comparison")
-
-    st.pyplot(fig2)
+st.pyplot(fig)
 
 
-    csv = data.to_csv(index=False)
+st.subheader("📊 Salary Comparison")
 
-    st.download_button(
-        "📥 Download Dataset",
-        csv,
-        file_name="salary_data.csv",
-        mime="text/csv"
-    )
+fig2, ax2 = plt.subplots(figsize=(8,4))
 
+ax2.bar(
+    data["Experience"],
+    data["Salary"],
+    color="orange"
+)
+
+ax2.set_xlabel("Experience")
+ax2.set_ylabel("Salary")
+ax2.set_title("Salary Comparison")
+
+st.pyplot(fig2)
+
+
+st.subheader("📊 Salary Comparison")
+
+fig2, ax2 = plt.subplots(figsize=(8,4))
+
+ax2.bar(
+    data["Experience"],
+    data["Salary"],
+    color="orange"
+)
+
+ax2.set_xlabel("Experience")
+ax2.set_ylabel("Salary")
+ax2.set_title("Salary Comparison")
+
+st.pyplot(fig2)
+
+
+csv = data.to_csv(index=False)
+
+st.download_button(
+    "📥 Download Dataset",
+    csv,
+    file_name="salary_data.csv",
+    mime="text/csv"
+)
 
 # ----------------------------------
 # Prediction History
