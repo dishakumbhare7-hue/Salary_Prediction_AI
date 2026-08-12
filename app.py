@@ -65,7 +65,7 @@ div[data-testid="stMetric"] {
 # Load Model & Dataset
 # ----------------------------------
 model = joblib.load("salary_model.pkl")
-data = pd.read_csv("salary_data.csv")
+data = pd.read_csv("dataset/salary_data.csv")
 # Accuracy Calculation
 X = data[["Experience","Skills"]]
 y = data["Salary"]
